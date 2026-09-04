@@ -18,25 +18,25 @@ Combining a general-market source, a curated source, and a remote-specialist sou
 
 ## Project phases
 
-Status legend: ✅ Completed · 🔧 Working on · ⏳ Pending
+Status keys: ✅ Completed · 🔧 Working on · ⏳ Pending
  
 | Phase | Status |
 |---|---|
-| Phase 1 — Data collection | ✅ Completed |
-| Phase 2 — Data cleaning & feature engineering | 🔧 Working on |
-| Phase 3 — Analysis | ⏳ Pending |
-| Phase 4 — Presentation & packaging | ⏳ Pending |
+| Phase 1: Data collection | ✅ Completed |
+| Phase 2: Data cleaning & feature engineering | 🔧 Working on |
+| Phase 3: Analysis | ⏳ Pending |
+| Phase 4: Presentation & packaging | ⏳ Pending |
 
-**Phase 1 — Data collection (4-5 days)**  
+**Phase 1: Data collection (4-5 days)**  
 Pull postings from all three APIs, filter to DS/ML/Analyst roles, store raw JSON immediately (no on-the-fly processing). Target: 500-1500 postings.
 
-**Phase 2 — Data cleaning & feature engineering (3-4 days)**  
+**Phase 2: Data cleaning & feature engineering (3-4 days)**  
 Deduplicate, normalize location/salary formats, extract structured features from free text (skills, tools, years of experience, degree requirements, work type).
 
-**Phase 3 — Analysis (4-5 days)**  
+**Phase 3: Analysis (4-5 days)**  
 Skill-frequency analysis, salary distribution by role/seniority/work-type, posting trends over time, and a lightweight model to predict role category or salary bracket from description text.
 
-**Phase 4 — Presentation & packaging (3-4 days)**   
+**Phase 4: Presentation & packaging (3-4 days)**   
 Interactive dashboard, deliverable repository with with findings and human interactive results (I bet no one wants to go through configuring venv to get data analysis result), and a short write-up summarizing the most interesting insights.
 
 ## Methodology notes
