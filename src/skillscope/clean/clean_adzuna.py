@@ -1,10 +1,12 @@
 import pandas as pd
 from pathlib import Path
 from skillscope import (config, matching, utils)
+from skillscope.fetch import fetch_adzuna
 
+cleaned_adzuna_path = config.CLEANED_DATA_PATH / "adzuna.csv"
 
 def main():
-    adzuna_data = utils.load_file(config.raw_adzuna_path)
+    adzuna_data = utils.load_file(fetch_adzuna.raw_adzuna_path)
 
     adzuna_cleaned_data = list()
 
@@ -22,6 +24,8 @@ def main():
             "posted_date": job.get("created", ""),
             "work_type": matching.determine_work_type(job),
             "tags": "; ".join([job.get("category", {}).get("tag", "")]),
+            "score": job.get("score", 0),
+            "matched": utils.make_hashable(utils.clean_matched(*job.get("matched", [{}]))),
             "source": "adzuna"
             }
         )
@@ -29,7 +33,8 @@ def main():
     adzuna_df = pd.DataFrame(adzuna_cleaned_data)
     adzuna_df = adzuna_df.drop_duplicates().reset_index(drop=True)
 
-    cleaned_adzuna_path = config.CLEANED_DATA_PATH / "adzuna.csv"
-
     adzuna_df.to_csv(cleaned_adzuna_path)
     print(f"File with {len(adzuna_df)} entries saved to {cleaned_adzuna_path}")
+
+if __name__ == "__main__":
+    main()
