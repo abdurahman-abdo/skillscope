@@ -1,10 +1,11 @@
 import pandas as pd
 from skillscope import (config, utils, matching)
+from skillscope.fetch import fetch_muse
+
+cleaned_muse_path = config.CLEANED_DATA_PATH / "muse.csv"
 
 def main() -> None:
-    muse_data = utils.load_file(config.raw_muse_path)
-
-    # print("".join([json.dumps(muse['locations'], indent=4) for muse in muse_data]))
+    muse_data = utils.load_file(fetch_muse.raw_muse_path)
 
     muse_cleaned_data = list()
 
@@ -28,12 +29,8 @@ def main() -> None:
             }
         )
 
-    # print(len(muse_cleaned_data))
-    # print(json.dumps(muse_cleaned_data, indent=4))
     muse_df = pd.DataFrame(muse_cleaned_data)
     muse_df = muse_df.drop_duplicates().reset_index(drop=True)
-
-    cleaned_muse_path = config.CLEANED_DATA_PATH / "muse.csv"
 
     muse_df.to_csv(cleaned_muse_path)
     print(f"Successfully saved the cleaned version with {len(muse_df)} entries to {cleaned_muse_path}")

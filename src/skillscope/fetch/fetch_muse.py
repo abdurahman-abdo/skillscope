@@ -15,14 +15,19 @@ def main() -> None:
         "India"
     ]
 
+    print("Retrieving data...")
+
     muse_raw_data: list = []
     
     for country in muse_countries:
         for page in range(100):
+            print(f"Round: {page + 1}/100 completed successfully (current data source: {country}).")
+            
             data: list[dict] = fetch_from_muse(page, country)
             muse_raw_data.extend(data)
 
-    print(f"Fetched {len(muse_raw_data)} job listings from The Muse API.")
+    print("Data retrieved successfully.")
+    print("Storing data with additional keys...")
 
     final_raw_muse: list = []
     
