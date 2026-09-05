@@ -14,7 +14,7 @@ load_dotenv(dotenv_path=BASE_DIR / ".env")
 ADZUNA_APP_ID: str = os.getenv("ADZUNA_APP_ID")
 ADZUNA_APP_KEY: str = os.getenv("ADZUNA_APP_KEY")
 
-DATA_PATH = Path.cwd() / "data"
+DATA_PATH = Path.cwd() / ".." / "data"
 DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 RAW_DATA_PATH = DATA_PATH / "raw"
