@@ -4,14 +4,22 @@ from skillscope import (config, utils, matching)
 raw_arbeit_path = config.RAW_DATA_PATH / "arbeit.json"
 
 def main() -> None:
+
+    print("Retrieving data...")
+
     raw_arbeit_data: list = []
     
     for page in range(0, 20, 2):
+        print(f"Round: {int((page / 2) + 1)}/10 completed successfully.")
+        
         raw: list[dict] = fetch_from_arbeit(page)
         raw_arbeit_data.extend(raw)
         
         # to avoid hitting the arbeit rate limit, we can add a delay between requests
         time.sleep(60)  # sleep for 1 minute
+
+    print("Data retrieved successfully.")
+    print("Storing data with additional keys...")
 
     final_raw_arbeit: list = []
 

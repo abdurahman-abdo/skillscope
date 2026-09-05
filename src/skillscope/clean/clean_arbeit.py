@@ -1,9 +1,10 @@
 import re
 import pandas as pd
 from skillscope import (config, utils)
+from skillscope.fetch import fetch_arbeit
 
 def main():
-    arbeit_data = utils.load_file(config.raw_arbeit_path)
+    arbeit_data = utils.load_file(fetch_arbeit.raw_arbeit_path)
 
     arbeit_cleaned_data = list()
 
@@ -12,7 +13,7 @@ def main():
             {
             "job_name": job.get("title", ""),
             "company": job.get("company_name", ""),
-            "country": extract_country(job.get("location", "")), # to-do
+            "country": extract_country(job.get("location", "")),
             "location": job.get("location", ""),
             "min_salary": job.get("salary_min", 0),
             "max_salary": job.get("salary_max", 0),
@@ -21,7 +22,7 @@ def main():
             "work_type": "remote" if job.get("remote") else "onsite",
             "tags": "; ".join(job.get("tags", [])),
             "score": job.get("score", 0),
-            "matched": utils.make_hashable(utils.clean_matched(*job.get("matched", [{}]))), # to-do
+            "matched": utils.make_hashable(utils.clean_matched(*job.get("matched", [{}]))),
             "source": "arbeit"
             }
         )
