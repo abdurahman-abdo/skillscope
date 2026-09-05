@@ -88,10 +88,10 @@ def filter_matches(data: dict, match_keywords: dict) -> bool:
         `data['matched']:` a list of dictionaries with which match key matched which target role, respectively.
     """
     
-    title: str = match_keywords['title']
-    slug: str = match_keywords['slug']
-    tags: str = match_keywords['tags']
-    description: str = match_keywords['description']
+    title: str = match_keywords['title'].lower()
+    slug: str = match_keywords['slug'].lower()
+    tags: str = match_keywords['tags'].lower()
+    description: str = match_keywords['description'].lower()
 
     data['score'] = 0
     data['matched'] = []
