@@ -65,3 +65,32 @@ _To be added as analysis progresses._
 cd src/data/raw
 cd src/data/cleaned
 ```
+
+## Directory Structure
+
+```
+src/
+└── skillscope/
+    ├── data/
+    │   ├── raw/
+    │   │   ├── adzuna.json
+    │   │   ├── arbeit.json
+    │   │   └── muse.json
+    │   └── cleaned/
+    │       ├── adzuna.csv
+    │       ├── arbeit.csv
+    │       └── muse.csv
+    ├── fetch/
+    │   ├── fetch_adzuna.py
+    │   ├── fetch_arbeit.py
+    │   └── fetch_muse.py
+    ├── clean/
+    │   ├── clean_adzuna.py
+    │   ├── clean_arbeit.py
+    │   └── clean_muse.py
+    ├── __init__.py
+    ├── main.ipynb      # Notebook where new algorithms and logic are experimented at
+    ├── utils.py        # basic utility functions reused multiple times like load_file, save_file...
+    ├── matching.py     # matching, and data extraction related algorithms
+    └── config.py       # configuration variables like: paths and API keys loaded from env
+```
