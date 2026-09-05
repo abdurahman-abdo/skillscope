@@ -3,6 +3,8 @@ import pandas as pd
 from skillscope import (config, utils)
 from skillscope.fetch import fetch_arbeit
 
+cleaned_arbeit_path = config.CLEANED_DATA_PATH / "arbeit.csv"
+
 def main():
     arbeit_data = utils.load_file(fetch_arbeit.raw_arbeit_path)
 
@@ -29,8 +31,6 @@ def main():
 
     arbeit_df = pd.DataFrame(arbeit_cleaned_data)
     arbeit_df = arbeit_df.drop_duplicates().reset_index(drop=True)
-
-    cleaned_arbeit_path = config.CLEANED_DATA_PATH / "arbeit.csv"
 
     arbeit_df.to_csv(cleaned_arbeit_path)
     print(f"File with {len(arbeit_df)} entries saved to {cleaned_arbeit_path}")
