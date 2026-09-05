@@ -19,6 +19,7 @@ def main():
     for role in matching.TARGET_ROLES:
         for country in adzuna_countries:
             for page in range(1, 21, 2):
+                print(f"Round: {-(-page // 2)} completed successfully for role: {role} in country: {country}.")
                 jobs: list[dict] = fetch_jobs_from_adzuna(role, page, country, ADZUNA_RESULTS_PER_PAGE)
                 adzuna_raw_data.extend(jobs)
     
