@@ -62,8 +62,8 @@ _To be added as analysis progresses._
 
 **Current data collection results could be accessed at:**
 ```bash
-cd src/data/raw
-cd src/data/cleaned
+cd src/skillscope/data/raw
+cd src/skillscope/data/cleaned
 ```
 
 ## Directory Structure
@@ -89,7 +89,7 @@ src/
     │   ├── clean_arbeit.py
     │   └── clean_muse.py
     ├── __init__.py
-    ├── main.ipynb      # Notebook where new algorithms and logic are experimented at
+    ├── main.ipynb      # Notebook where new algorithms and logics are experimented at
     ├── utils.py        # basic utility functions reused multiple times like load_file, save_file...
     ├── matching.py     # matching, and data extraction related algorithms
     └── config.py       # configuration variables like: paths and API keys loaded from env
