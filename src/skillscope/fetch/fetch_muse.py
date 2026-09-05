@@ -1,6 +1,8 @@
 import requests
 from skillscope import (config, utils, matching)
 
+raw_muse_path = config.RAW_DATA_PATH / "muse.json"
+
 def main() -> None:
     muse_countries: list[str] = [
         "United States",
@@ -34,8 +36,6 @@ def main() -> None:
         
         if matching.filter_matches(data, match_keys):
             final_raw_muse.append(data)
-
-    raw_muse_path = config.RAW_DATA_PATH / "muse.json"
 
     utils.save_file(raw_muse_path, final_raw_muse)
     print(f"File with {len(final_raw_muse)} entries saved to {raw_muse_path}")

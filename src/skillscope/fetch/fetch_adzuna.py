@@ -1,6 +1,8 @@
 import requests
 from skillscope import (config, utils, matching)
 
+raw_adzuna_path = config.RAW_DATA_PATH / "adzuna.json"
+
 adzuna_app_id: str = config.ADZUNA_APP_ID
 adzuna_app_key: str = config.ADZUNA_APP_KEY
 ADZUNA_RESULTS_PER_PAGE: int = 5
@@ -35,8 +37,6 @@ def main():
         
         if matching.filter_matches(data, match_keys):
             final_raw_adzuna.append(data)
-
-    raw_adzuna_path = config.RAW_DATA_PATH / "adzuna.json"
 
     utils.save_file(raw_adzuna_path, final_raw_adzuna)
     print(f"File with {len(final_raw_adzuna)} entries saved to {raw_adzuna_path}")

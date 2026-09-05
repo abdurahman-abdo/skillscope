@@ -1,6 +1,8 @@
 import requests, json, time
 from skillscope import (config, utils, matching)
 
+raw_arbeit_path = config.RAW_DATA_PATH / "arbeit.json"
+
 def main() -> None:
     raw_arbeit_data: list = []
     
@@ -23,8 +25,6 @@ def main() -> None:
         
         if matching.filter_matches(data, match_keys):
             final_raw_arbeit.append(data)
-
-    raw_arbeit_path = config.RAW_DATA_PATH / "arbeit.json"
 
     utils.save_file(raw_arbeit_path, final_raw_arbeit)
     print(f"File with {len(final_raw_arbeit)} entries saved to {raw_arbeit_path}")
