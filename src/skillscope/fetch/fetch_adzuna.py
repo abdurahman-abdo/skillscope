@@ -26,10 +26,10 @@ def main():
     
     for data in adzuna_raw_data:
         match_keys: dict = {
-            "title": data['name'],
-            "slug": data['short_name'].replace("-", " "),
-            "tags": data.get("categories", [])[0].get("name", "") if data["categories"] else '',
-            "description": data['contents'],
+            "title": data['title'],
+            "slug": data.get("category", {}).get("tag", "").replace("-", " "),
+            "tags": data.get("category", {}).get("label", ""),
+            "description": data['description'],
         }
         
         if matching.filter_matches(data, match_keys):
