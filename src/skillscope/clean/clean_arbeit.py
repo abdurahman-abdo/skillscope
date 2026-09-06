@@ -1,6 +1,6 @@
 import re
 import pandas as pd
-from skillscope import (config, utils)
+from skillscope import (config, utils, matching, extraction)
 from skillscope.fetch import fetch_arbeit
 
 cleaned_arbeit_path = config.CLEANED_DATA_PATH / "arbeit.csv"
@@ -11,6 +11,18 @@ def main():
     arbeit_cleaned_data = list()
 
     for job in arbeit_data:
+        desc_cleaned = utils.clean_html(job.get("description", "")).replace("\n", "[NEWLINE]")
+        
+        text: str = " ".join([
+            job.get("slug", "").replace("-", " "),
+            job.get("title", ""),
+            desc_cleaned,
+            job.get("location", ""),
+            " ".join(job.get("tags", []))
+        ]).lower()
+        
+        determined_work_type = matching.determine_work_type(text)
+        
         arbeit_cleaned_data.append(
             {
             "job_name": job.get("title", ""),
@@ -19,12 +31,15 @@ def main():
             "location": job.get("location", ""),
             "min_salary": job.get("salary_min", 0),
             "max_salary": job.get("salary_max", 0),
-            "description": utils.clean_description(job.get("description", "")),
+            "description": desc_cleaned,
             "posted_date": job.get("created_at", ""),
-            "work_type": "remote" if job.get("remote") else "onsite",
+            "work_type": "remote" if determined_work_type == "unknown" and job.get('remote') else determined_work_type,
             "tags": "; ".join(job.get("tags", [])),
+            "educational_requirement": extraction.extract_required_edu_background(desc_cleaned),
+            "years_of_experience": "to-do",
+            "required_tools": "to-do",
             "score": job.get("score", 0),
-            "matched": utils.make_hashable(utils.clean_matched(*job.get("matched", [{}]))),
+            "matched": utils.make_hashable(utils.group_values_by_key(*job.get("matched", [{}]))),
             "source": "arbeit"
             }
         )

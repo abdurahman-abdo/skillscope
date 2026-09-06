@@ -1,6 +1,6 @@
 import pandas as pd
 from pathlib import Path
-from skillscope import (config, matching, utils)
+from skillscope import (config, matching, utils, extraction)
 from skillscope.fetch import fetch_adzuna
 
 cleaned_adzuna_path = config.CLEANED_DATA_PATH / "adzuna.csv"
@@ -11,7 +11,13 @@ def main():
     adzuna_cleaned_data = list()
 
     for job in adzuna_data:
-        # print(json.dumps(job["location"]["area"], indent=4))
+        text: str = " ".join([
+            job.get("title", ""),
+            job.get("description", "").replace("\n", " ").strip(),
+            job.get("location", {}).get("display_name", ""),
+            " ".join(job.get("location", {}).get("area", []))
+        ]).lower()
+        
         adzuna_cleaned_data.append(
             {
             "job_name": job.get("title", ""),
@@ -22,10 +28,13 @@ def main():
             "max_salary": job.get("salary_max", 0),
             "description": job.get("description", "").replace("\n", " ").strip(),
             "posted_date": job.get("created", ""),
-            "work_type": matching.determine_work_type(job),
+            "work_type": matching.determine_work_type(text),
             "tags": "; ".join([job.get("category", {}).get("tag", "")]),
+            "edu_background": "description is truncated, can't extract",
+            "years_of_experience": "description is truncated, can't extract",
+            "required_tools": "description is truncated, can't extract",
             "score": job.get("score", 0),
-            "matched": utils.make_hashable(utils.clean_matched(*job.get("matched", [{}]))),
+            "matched": utils.make_hashable(utils.group_values_by_key(*job.get("matched", [{}]))),
             "source": "adzuna"
             }
         )

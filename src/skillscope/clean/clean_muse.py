@@ -1,5 +1,5 @@
 import pandas as pd
-from skillscope import (config, utils, matching)
+from skillscope import (config, utils, matching, extraction)
 from skillscope.fetch import fetch_muse
 
 cleaned_muse_path = config.CLEANED_DATA_PATH / "muse.csv"
@@ -12,6 +12,8 @@ def main() -> None:
     for job in muse_data:
         work_type, country, location = get_exact_location(job.get("locations", {}))
         
+        desc_cleaned = utils.clean_html(job.get("contents", "")).replace("\n", "[NEWLINE]")
+        
         muse_cleaned_data.append(
             {
             "job_name": job.get("name", ""),
@@ -20,11 +22,15 @@ def main() -> None:
             "location": location,
             "min_salary": job.get("min_salary", 0),
             "max_salary": job.get("max_salary", 0),
-            "description": utils.clean_description(job.get("contents", "")),
+            "description": desc_cleaned,
             "posted_date": job.get("publication_date", ""),
             "work_type": work_type,
+            "tags": job.get("tags", [{}])[0].get("short_name", "") if job.get("tags", [{}]) != [] else '',
+            "educational_requirement": extraction.extract_required_edu_background(desc_cleaned),
+            "years_of_experience": "to-do",
+            "required_tools": "to-do",
             "score": job.get("score", 0),
-            "matched": utils.make_hashable(utils.clean_matched(*job.get("matched", [{}]))),
+            "matched": utils.make_hashable(utils.group_values_by_key(*job.get("matched", [{}]))),
             "source": "muse"
             }
         )
@@ -59,7 +65,7 @@ def get_exact_location(data: list[dict]) -> tuple:
     for component in temp:
         if '/' in component['name']:
             data.remove(component)
-            work_type = matching.determine_work_type(component)
+            work_type = matching.determine_work_type(component['name'].replace("/", " "))
         elif ',' in component['name']:
             location, country = component['name'].split(",")
             
