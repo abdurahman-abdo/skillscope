@@ -36,6 +36,7 @@ def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> 
     return obj
 
 def clean_description(description: str) -> str:
+        new_desc = description.replace("\n", " ").strip().replace("&nbsp;", "    ")
         pattern = r"<[^>]+>"
         return re.sub(pattern, " ", description)
 
