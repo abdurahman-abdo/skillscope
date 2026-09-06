@@ -19,7 +19,7 @@ def main():
             "location": job.get("location", ""),
             "min_salary": job.get("salary_min", 0),
             "max_salary": job.get("salary_max", 0),
-            "description": (job.get("description", "").replace("\n", " ").strip()),
+            "description": utils.clean_description(job.get("description", "").replace("\n", " ").strip()),
             "posted_date": job.get("created_at", ""),
             "work_type": "remote" if job.get("remote") else "onsite",
             "tags": "; ".join(job.get("tags", [])),
