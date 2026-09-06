@@ -1,4 +1,5 @@
 import json
+import re
 
 def main() -> None:
     print("""This is the utilities module.
@@ -33,6 +34,10 @@ def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> 
     if isinstance(obj, (list, set, tuple)):
         return tuple(make_hashable(item) for item in obj)
     return obj
+
+def clean_description(description: str) -> str:
+        pattern = r"<[^>]+>"
+        return re.sub(pattern, "    ", description)
 
 if __name__ == "__main__":
     main()
