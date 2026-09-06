@@ -40,7 +40,9 @@ def clean_description(description: str) -> str:
         new_desc = description.replace("\n", " ").replace("&nbsp;", " ")
         unescaped = html.unescape(new_desc)
         tags = r"<[^>]+>"
-        return re.sub(tags, "", unescaped).strip()
+        consecutive_tags = r"</[^>/]+><[^>/]+>"
+        final_desc = re.sub(consecutive_tags, " ", unescaped)
+        return re.sub(tags, "", final_desc).strip()
 
 if __name__ == "__main__":
     main()
