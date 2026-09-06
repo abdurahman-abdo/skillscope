@@ -14,17 +14,7 @@ TARGET_ROLES: list[str] = [
     "data engineer"
 ]
 
-def determine_work_type(job: dict) -> str:
-    text: str = " ".join([
-        job.get("name", ""),
-        job.get("title", ""),
-        job.get("description", ""),
-        job.get("contract_type", ""),
-        job.get("contract_time", ""),
-        job.get("location", {}).get("display_name", ""),
-        " ".join(job.get("location", {}).get("area", []))
-    ]).lower()
-
+def determine_work_type(text: str) -> str:
     hybrid_keywords: list = [
         "hybrid",
         "part remote",
@@ -112,18 +102,6 @@ def filter_matches(data: dict, match_keywords: dict) -> bool:
             matched.append({'description': role})
 
     return data['score'] > 0
-
-def extract_years_of_experience(description: str) -> int:
-    # working on this in Jupyter notebook
-    pass
-
-def extract_required_edu_background(description: str) -> str:
-    # working on this in my Jupyter notebook
-    pass
-
-def extract_required_tools(description: str) -> list[str]:
-    # working on this in my jupyter notebook
-    pass
 
 if __name__ == "__main__":
     main()
