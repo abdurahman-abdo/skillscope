@@ -16,18 +16,18 @@ def save_file(file_path: str, data: list[dict], mode: str = 'w') -> None:
     with open(file_path, mode, encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
-def clean_matched(*matches: dict) -> dict:
+def group_values_by_key(*datas: dict) -> dict:
     dict_keys: list = []
-    result_dict: dict = {}
-    for match in matches:
-        for key in match.keys():
+    return_dict: dict = {}
+    for data in datas:
+        for key in data.keys():
             if key not in dict_keys:
                 dict_keys.append(key)
-                result_dict[key] = [match[key]]
+                return_dict[key] = [data[key]]
             else:
-                result_dict[key].append(match[key])
+                return_dict[key].append(data[key])
 
-    return result_dict
+    return return_dict
 
 def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> tuple:
     if isinstance(obj, dict):
@@ -36,8 +36,8 @@ def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> 
         return tuple(make_hashable(item) for item in obj)
     return obj
 
-def clean_description(description: str) -> str:
-        new_desc = description.replace("\n", " ").replace("&nbsp;", " ")
+def clean_html(description: str) -> str:
+        new_desc = description.replace("&nbsp;", " ")
         unescaped = html.unescape(new_desc)
         tags = r"<[^>]+>"
         consecutive_tags = r"</[^>/]+><[^>/]+>"
