@@ -37,10 +37,10 @@ def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> 
     return obj
 
 def clean_description(description: str) -> str:
-        new_desc = description.replace("\n", " ").strip().replace("", "    ")
+        new_desc = description.replace("\n", " ").replace("&nbsp;", " ")
         unescaped = html.unescape(new_desc)
         tags = r"<[^>]+>"
-        return re.sub(tags, " ", unescaped)
+        return re.sub(tags, "", unescaped).strip()
 
 if __name__ == "__main__":
     main()
