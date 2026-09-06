@@ -1,5 +1,6 @@
 import json
 import re
+import html
 
 def main() -> None:
     print("""This is the utilities module.
@@ -36,9 +37,10 @@ def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> 
     return obj
 
 def clean_description(description: str) -> str:
-        new_desc = description.replace("\n", " ").strip().replace("&nbsp;", "    ")
+        new_desc = description.replace("\n", " ").strip().replace("", "    ")
+        unescaped = html.unescape(new_desc)
         tags = r"<[^>]+>"
-        return re.sub(tags, " ", description)
+        return re.sub(tags, " ", unescaped)
 
 if __name__ == "__main__":
     main()
