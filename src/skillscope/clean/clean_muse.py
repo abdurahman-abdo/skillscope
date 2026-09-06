@@ -20,7 +20,7 @@ def main() -> None:
             "location": location,
             "min_salary": job.get("min_salary", 0),
             "max_salary": job.get("max_salary", 0),
-            "description": job.get("contents", "").replace("\n", " ").strip(),
+            "description": utils.clean_description(job.get("contents", "")),
             "posted_date": job.get("publication_date", ""),
             "work_type": work_type,
             "score": job.get("score", 0),
