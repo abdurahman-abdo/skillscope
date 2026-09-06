@@ -17,7 +17,7 @@ ADZUNA_APP_KEY: str = os.getenv("ADZUNA_APP_KEY")
 DATA_PATH = Path.cwd() / ".." / "data"
 DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
 
-RAW_DATA_PATH = DATA_PATH / "raw"
+RAW_DATA_PATH = DATA_PATH / "raw-scored"
 RAW_DATA_PATH.parent.mkdir(parents=True, exist_ok=True)
 
 CLEANED_DATA_PATH = DATA_PATH / "cleaned"
