@@ -8,9 +8,10 @@ def main() -> None:
 TARGET_ROLES: list[str] = [
     "data scientist",
     "machine learning",
-    "ml engineer",
-    "data analyst",
     "ai engineer",
+    "ml engineer",
+    "ai/ml Engineer",
+    "data analyst",
     "data engineer"
 ]
 
