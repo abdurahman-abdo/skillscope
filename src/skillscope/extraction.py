@@ -10,12 +10,16 @@ def extract_required_edu_background(desc: str) -> tuple[str, ...]:
         "bachelor's",
         "bsc",
         "b.s.",
-        "bs"
+        "bs",
+        "ba",
+        "bs/ba",
+        "ba/bs"
     ]
     
     doctorate_keywords: list[str] = [
         "phd",
         "ph.d",
+        "ph.d.",
         "doctorate"
     ]
     
