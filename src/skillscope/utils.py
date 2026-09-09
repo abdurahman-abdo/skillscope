@@ -42,11 +42,11 @@ def clean_html(description: str) -> str:
         new_desc = description.replace("&nbsp;", " ")
         unescaped = html.unescape(new_desc)
         
-        bullet_tags = r"(?i:</?li[^>]*>)"
-        newline_tags = r"(?i:</?p[^>]*>|</?div[^>]*>|<br[^>]*>|<hr[^>]*>)"
-        list_tags = r"(?i:</?ul[^>]*>|</?ol[^>]*>)"
+        bullet_tags = r"\s*(?i:</?li[^>]*>)\s*"
+        newline_tags = r"\s*(?i:</?p[^>]*>|</?div[^>]*>|<br[^>]*>|<hr[^>]*>)\s*"
+        list_tags = r"\s*(?i:</?ul[^>]*>|</?ol[^>]*>)\s*"
         consecutive_bullets = r"\[BULLET\]\s{0,2}\[BULLET\]"
-        heading_tag = r"</?h[1-6][^>]*>"
+        heading_tag = r"\s*</?h[1-6][^>]*>\s*"
         
         unescaped = re.sub(bullet_tags, "[BULLET]", unescaped)
         unescaped = re.sub(newline_tags, "[NEWLINE]", unescaped)
