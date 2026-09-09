@@ -13,4 +13,5 @@ wheels/
 
 # Jupyter Notebooks
 .ipynb_checkpoints/
-debug.ipynb
+*debug*
+*debug*/
