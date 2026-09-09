@@ -7,6 +7,8 @@ def main() -> None:
             It contains functions to load and save JSON files, 
             clean and hash matched job roles,
             and make objects hashable for use in sets or as dictionary keys.""")
+    
+    print(clean_html("Skills<ul>text with no li tags</ul>Next"))
 
 def load_file(file_path: str) -> list[dict]:
     with open(file_path, 'r', encoding='utf-8') as file:
@@ -39,8 +41,22 @@ def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> 
 def clean_html(description: str) -> str:
         new_desc = description.replace("&nbsp;", " ")
         unescaped = html.unescape(new_desc)
+        
+        bullet_tags = r"(?i:</?li[^>]*>)"
+        newline_tags = r"(?i:</?p[^>]*>|</?div[^>]*>|<br[^>]*>|<hr[^>]*>)"
+        list_tags = r"(?i:</?ul[^>]*>|</?ol[^>]*>)"
+        consecutive_bullets = r"\[BULLET\]\s{0,2}\[BULLET\]"
+        heading_tag = r"</?h[1-6][^>]*>"
+        
+        unescaped = re.sub(bullet_tags, "[BULLET]", unescaped)
+        unescaped = re.sub(newline_tags, "[NEWLINE]", unescaped)
+        unescaped = re.sub(list_tags, "[LIST]", unescaped)
+        unescaped = re.sub(consecutive_bullets, "[BULLET]", unescaped)
+        unescaped = re.sub(heading_tag, "[H]", unescaped)
+        
         tags = r"<[^>]+>"
-        consecutive_tags = r"</[^>/]+><[^>/]+>"
+        consecutive_tags = r"(?i:</[^>/]+><[^>/]+>)"
+        
         final_desc = re.sub(consecutive_tags, " ", unescaped)
         return re.sub(tags, "", final_desc).strip()
 
