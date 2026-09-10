@@ -118,38 +118,46 @@ EXPERIENCE_CAPTURED_AFTER = rf"(?P<field>{SAME_SENTENCE_WILDCARD}experience\s+{L
 # ---------------------------------------------------------
 
 # "with [at least] 5 years [of] experience in Python"
-CASE_1 = rf"(?i:(?:{WITH_PATTERN}|with\s+){MAIN_PATTERN}{FIELD_AFTER_BRACKETS})"
-
+CASE_1 = re.compile(
+    rf"(?:{WITH_PATTERN}|with\s+){MAIN_PATTERN}{FIELD_AFTER_BRACKETS}",
+    flags=re.IGNORECASE,
+)
 # "(5+ years) FIELD" (no word "experience")
-CASE_2 = rf"\({MAIN_PATTERN}:?\)[:\s]*{FIELD_AFTER_BRACKETS}"
+CASE_2 = re.compile(rf"\({MAIN_PATTERN}:?\)[:\s]*{FIELD_AFTER_BRACKETS}")
 
 # "Experience:" / "Experience[H]" section label, years mentioned nearby
-CASE_3 = rf"(?:Experience)(?:\[H\])?:?{SAME_SENTENCE_WILDCARD}{MAIN_PATTERN}\s+{FIELD_INFO_AFTER}"
+CASE_3 = re.compile(rf"(?:Experience)(?:\[H\])?:?{SAME_SENTENCE_WILDCARD}{MAIN_PATTERN}\s+{FIELD_INFO_AFTER}")
 
 # "5 years ... experience linking_word [FIELD]"
-CASE_4 = rf"(?i:{MAIN_PATTERN}{EXPERIENCE_CAPTURED_AFTER})"
+CASE_4 = re.compile(
+    rf"(?:{MAIN_PATTERN}{EXPERIENCE_CAPTURED_AFTER})",
+    re.IGNORECASE
+)
 
 # "5 years [FIELD] experience" (no linking word)
-CASE_5 = rf"(?i:{MAIN_PATTERN}{FIELD_INFO_MIDDLE}experience)"
+CASE_5 = re.compile(
+    rf"(?:{MAIN_PATTERN}{FIELD_INFO_MIDDLE}experience)",
+    re.IGNORECASE
+)
 
 # "Qualifications:" / "Qualifications[H]" section label, field after years
-CASE_6 = rf"(?:Qualifications?)(?:\[H\])?:?{SAME_SENTENCE_WILDCARD}{MAIN_PATTERN}\s+{FIELD_INFO_AFTER}"
+CASE_6 = re.compile(rf"(?:Qualifications?)(?:\[H\])?:?{SAME_SENTENCE_WILDCARD}{MAIN_PATTERN}\s+{FIELD_INFO_AFTER}")
 
 # same as CASE_6 but field precedes the years mention
-CASE_7 = rf"(?:Qualifications?)(?:\[H\])?:?{FIELD_INFO_MIDDLE}{MAIN_PATTERN}"
+CASE_7 = re.compile(rf"(?:Qualifications?)(?:\[H\])?:?{FIELD_INFO_MIDDLE}{MAIN_PATTERN}")
 
 # "five (5+) years of experience in Python" -> textual number spelled out
 # with the numeric form in parentheses, field after "experience"
-CASE_8 = rf"{TEXTUAL}{SPACE}\((?P<years>{NUMERIC}{SPACE}\+?)\){SPACE}{YEARS}{SAME_SENTENCE_WILDCARD}experience\s+{FIELD_INFO_AFTER}"
+CASE_8 = re.compile(rf"{TEXTUAL}{SPACE}\((?P<years>{NUMERIC}{SPACE}\+?)\){SPACE}{YEARS}{SAME_SENTENCE_WILDCARD}experience\s+{FIELD_INFO_AFTER}")
 
 # same as CASE_8 but field precedes "experience"
-CASE_9 = rf"{TEXTUAL}{SPACE}\((?P<years>{NUMERIC}{SPACE}\+?)\){SPACE}{YEARS}{FIELD_INFO_MIDDLE}experience"
+CASE_9 = re.compile(rf"{TEXTUAL}{SPACE}\((?P<years>{NUMERIC}{SPACE}\+?)\){SPACE}{YEARS}{FIELD_INFO_MIDDLE}experience")
 
 # "We are looking for someone with 5 years of experience in Python"
-CASE_10 = rf"{LOOKING_FOR_PATTERN}{SAME_SENTENCE_WILDCARD}{MAIN_PATTERN}\s+{FIELD_INFO_AFTER}"
+CASE_10 = re.compile(rf"{LOOKING_FOR_PATTERN}{SAME_SENTENCE_WILDCARD}{MAIN_PATTERN}\s+{FIELD_INFO_AFTER}")
 
 # same as CASE_10 but field precedes the years mention
-CASE_11 = rf"{LOOKING_FOR_PATTERN}{FIELD_INFO_MIDDLE}{MAIN_PATTERN}"
+CASE_11 = re.compile(rf"{LOOKING_FOR_PATTERN}{FIELD_INFO_MIDDLE}{MAIN_PATTERN}")
 
 # ---------------------------------------------------------
 # Final pattern composition, More specific shapes first 
@@ -186,11 +194,16 @@ def extract_years_of_experience(description: str) -> tuple[dict[str, str], ...]:
         - This function doesn't take into account if tabular data is in the passed description 
         since `clean_html` doesn't handle it currently.
     """
+    if "year" not in description.lower():
+        return ()
+    if re.search(rf"(?:{NUMERIC}|{TEXTUAL})", description) is None:
+        return ()
+    
     captured_json = []
 
     remaining = description
     for pattern in PATTERNS:
-        while match := re.search(pattern, remaining):
+        while match := pattern.search(remaining):
             captured_json.append(match.groupdict())
             remaining = remaining[:match.start()] + remaining[match.end():]
 
