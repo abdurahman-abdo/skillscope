@@ -11,9 +11,11 @@ def main():
     adzuna_cleaned_data = list()
 
     for job in adzuna_data:
+        desc_cleaned = utils.clean_html(job.get("description", "")).replace("\n", "[NEWLINE]")        
+        
         text: str = " ".join([
             job.get("title", ""),
-            job.get("description", "").replace("\n", " ").strip(),
+            desc_cleaned,
             job.get("location", {}).get("display_name", ""),
             " ".join(job.get("location", {}).get("area", []))
         ]).lower()
@@ -26,13 +28,13 @@ def main():
             "location": job.get("location", {}).get("display_name", ""),
             "min_salary": job.get("salary_min", 0),
             "max_salary": job.get("salary_max", 0),
-            "description": job.get("description", "").replace("\n", " ").strip(),
+            "description": desc_cleaned,
             "posted_date": job.get("created", ""),
             "work_type": matching.determine_work_type(text),
             "tags": "; ".join([job.get("category", {}).get("tag", "")]),
-            "edu_background": "description is truncated, can't extract",
-            "years_of_experience": "description is truncated, can't extract",
-            "required_tools": "description is truncated, can't extract",
+            "edu_background": extraction.extract_required_edu_background(desc_cleaned),
+            "years_of_experience": utils.make_hashable(extraction.extract_years_of_experience(desc_cleaned)),
+            "required_tools": "to-do",
             "score": job.get("score", 0),
             "matched": utils.make_hashable(utils.group_values_by_key(*job.get("matched", [{}]))),
             "source": "adzuna"
