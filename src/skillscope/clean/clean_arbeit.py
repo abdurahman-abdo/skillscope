@@ -36,7 +36,7 @@ def main():
             "work_type": "remote" if determined_work_type == "unknown" and job.get('remote') else determined_work_type,
             "tags": "; ".join(job.get("tags", [])),
             "educational_requirement": extraction.extract_required_edu_background(desc_cleaned),
-            "years_of_experience": "to-do",
+            "years_of_experience": utils.make_hashable(extraction.extract_years_of_experience(desc_cleaned)),
             "required_tools": "to-do",
             "score": job.get("score", 0),
             "matched": utils.make_hashable(utils.group_values_by_key(*job.get("matched", [{}]))),
