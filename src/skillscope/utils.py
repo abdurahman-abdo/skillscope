@@ -43,16 +43,18 @@ def clean_html(description: str) -> str:
         unescaped = html.unescape(new_desc)
         
         bullet_tags = r"\s*(?i:</?li[^>]*>)\s*"
-        newline_tags = r"\s*(?i:</?p[^>]*>|</?div[^>]*>|<br[^>]*>|<hr[^>]*>)\s*"
+        newline_tags = r"\s*(?i:</?div[^>]*>|<br[^>]*>|<hr[^>]*>)\s*"
         list_tags = r"\s*(?i:</?ul[^>]*>|</?ol[^>]*>)\s*"
         consecutive_bullets = r"\[BULLET\]\s{0,2}\[BULLET\]"
         heading_tag = r"\s*</?h[1-6][^>]*>\s*"
+        paragraph_tag = r"\s*</?p[^>]*>\s*"
         
         unescaped = re.sub(bullet_tags, "[BULLET]", unescaped)
         unescaped = re.sub(newline_tags, "[NEWLINE]", unescaped)
         unescaped = re.sub(list_tags, "[LIST]", unescaped)
         unescaped = re.sub(consecutive_bullets, "[BULLET]", unescaped)
         unescaped = re.sub(heading_tag, "[H]", unescaped)
+        unescaped = re.sub(paragraph_tag, "[P]", unescaped)
         
         tags = r"<[^>]+>"
         consecutive_tags = r"(?i:</[^>/]+><[^>/]+>)"
