@@ -45,6 +45,10 @@ def extract_required_edu_background(desc: str) -> tuple[str, ...]:
     
     return tuple(return_values)
 
+"""The constants below are part of the wider years_of_experience extractor function after them
+    Each of the constants hold holds unique pattern and functionality to predict in what shape/s a 
+    years of experience would be found in a plain description of a job posting.
+"""
 SPACE = r"\s{0,2}?"
 HTML_TAGS = r"(?:\[NEWLINE\]|\[BULLET\]|\[P\]|\[LIST\]|\[H\])"
 LINKING_WORDS = r"(?i:in|with|building|leading|working\s+(?i:in|with|on)|shipping|of|as|across|within|demonstrated\s+experience|proven\s+(?:track\s+record|experience)\s+on|leveraging|integrating|developing|implementing)"
@@ -91,14 +95,22 @@ CASE_11 = rf"{LOOKING_FOR_PATTERN}{FIELD_INFO_MIDDLE}{MAIN_PATTERN}"
 
 PATTERNS = [CASE_1, CASE_2, CASE_3, CASE_4, CASE_5, CASE_6, CASE_7, CASE_8, CASE_9, CASE_10, CASE_11]
 
-def extract_years_of_experience(description: str) -> list[dict]:
-    """_summary_
+def extract_years_of_experience(description: str) -> list[dict[str, str]]:
+    """This function takes a clean description of job posting as an input 
+    and returns a list of dictionaries, each with years and field of what it captured.  
+    
+    **Note:** This function takes pattern and regex pattern from the constants declared outside of this function!
+    
+    **Args:**  
+        `description (str):` a description of job data that was filtered through the clean_html of utils.py.  
+            **Warning:** _Calling it on raw HTML will fail to work as expected!_  
 
-    Args:
-        description (str): _description_
-
-    Returns:
-        list[dict]: _description_
+    **Returns:**
+        `list[dict[str, str]]:` returns a list of dictionary/ies (or empty list if none found) each with a years key and field key
+        signaling how many years of experience is required for which field.
+    
+    **known limitations:**
+        This function doesn't take into account if tabular data is in the passed description since clean_html doesn't handle it currently.
     """
     captured_json = []
 
