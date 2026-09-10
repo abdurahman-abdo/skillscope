@@ -27,7 +27,7 @@ def main() -> None:
             "work_type": work_type,
             "tags": job.get("tags", [{}])[0].get("short_name", "") if job.get("tags", [{}]) != [] else '',
             "educational_requirement": extraction.extract_required_edu_background(desc_cleaned),
-            "years_of_experience": "to-do",
+            "years_of_experience": utils.make_hashable(extraction.extract_years_of_experience(desc_cleaned)),
             "required_tools": "to-do",
             "score": job.get("score", 0),
             "matched": utils.make_hashable(utils.group_values_by_key(*job.get("matched", [{}]))),
