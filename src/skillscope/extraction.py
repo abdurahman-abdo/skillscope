@@ -55,7 +55,10 @@ All tests and development history could be found in main.ipynb —
 run any modified cells there before/after changing anything below.
 """
 
-""" Core, reused constants used for essential scanning """
+# ---------------------------------------------------------
+# Core, reused constants used for essential scanning 
+# ---------------------------------------------------------
+
 SPACE = r"\s{0,2}?"
 HTML_TAGS = r"(?:\[NEWLINE\]|\[BULLET\]|\[P\]|\[LIST\]|\[H\])" # Tokens inserted by clean_html() (see utils.py) in place of structural HTML tags.
 LINKING_WORDS = r"(?i:in|with|building|leading|working\s+(?i:in|with|on)|shipping|of|as|across|within|demonstrated\s+experience|proven\s+(?:track\s+record|experience)\s+on|leveraging|integrating|developing|implementing)"
@@ -63,7 +66,10 @@ LINKING_WORDS = r"(?i:in|with|building|leading|working\s+(?i:in|with|on)|shippin
 # Matches the common "We are looking for (someone who has) ..."
 LOOKING_FOR_PATTERN = r"We\sare\slooking(?:\sfor|\sfor\ssomeone|\sfor\ssomeone\swho\shas)?:?"
 
-""" Critical patterns that are always used to detect years """
+# ---------------------------------------------------------
+# Critical patterns that are always used to detect years
+# ---------------------------------------------------------
+
 TEXTUAL = r"(?:one|two|three|four|five|six|seven|eight|nine|ten)"
 NUMERIC = r"(?:1[0-5]|[1-9])"
 
@@ -71,7 +77,10 @@ NUMERIC = r"(?:1[0-5]|[1-9])"
 # used (?!\w) because \b is useless since it could end with ')'
 YEARS = r"\b(?:years|year\(s\)|year)(?!\w)"
 
-""" Building blocks that combine the core constants above """
+# ---------------------------------------------------------
+# Building blocks that combine the core constants above 
+# ---------------------------------------------------------
+
 # Matches lead-ins like "with at least", "a minimum of", "with ~10.." that precede a years mention
 WITH_PATTERN = rf"(?:with\s+at\s+least|at\s+least|with{SPACE}(?:~|(?:about|approximately|a\sminimum\sof))|a\sminimum\sof){SPACE}"
 SAME_SENTENCE_WILDCARD = rf"(?:(?!{HTML_TAGS})[^.\n;]){{0,50}}?"
@@ -87,7 +96,10 @@ MAIN_PATTERN = rf"{CAPTURED_NUMBER}{SPACE}{YEARS}"
 UNNAMED_MAIN_PATTERN = rf"{UNNAMED_CAPTURED_NUMBER}{SPACE}{YEARS}"
 LINKED_INFORMATION_PATTERN = rf"(?:(?!{WITH_PATTERN}{UNNAMED_CAPTURED_NUMBER}|{UNNAMED_MAIN_PATTERN}|{HTML_TAGS})[^.\n;])+"
 
-""" Critical patterns to detect field information """
+# ---------------------------------------------------------
+# Critical patterns to detect field information 
+# ---------------------------------------------------------
+
 # Field capture for "... years [linking word] FIELD", e.g. "5 years in Python".
 FIELD_INFO_AFTER = rf"(?P<field>{LINKING_WORDS}\s+{LINKED_INFORMATION_PATTERN})"
 
@@ -101,7 +113,9 @@ FIELD_AFTER_BRACKETS = rf"(?P<field>{LINKED_INFORMATION_PATTERN})"
 # the word "experience" itself sits between the years mention and the field.
 EXPERIENCE_CAPTURED_AFTER = rf"(?P<field>{SAME_SENTENCE_WILDCARD}experience\s+{LINKING_WORDS}\s+{LINKED_INFORMATION_PATTERN})"
 
-""" All case scenarios """
+# ---------------------------------------------------------
+# All case scenarios 
+# ---------------------------------------------------------
 
 # "with [at least] 5 years [of] experience in Python"
 CASE_1 = rf"(?i:(?:{WITH_PATTERN}|with\s+){MAIN_PATTERN}{FIELD_AFTER_BRACKETS})"
@@ -137,12 +151,15 @@ CASE_10 = rf"{LOOKING_FOR_PATTERN}{SAME_SENTENCE_WILDCARD}{MAIN_PATTERN}\s+{FIEL
 # same as CASE_10 but field precedes the years mention
 CASE_11 = rf"{LOOKING_FOR_PATTERN}{FIELD_INFO_MIDDLE}{MAIN_PATTERN}"
 
-""" Final pattern composition, More specific shapes first """
+# ---------------------------------------------------------
+# Final pattern composition, More specific shapes first 
+# ---------------------------------------------------------
+
 # since order matters because the function consumes the already matched ones.
 PATTERNS = [CASE_1, CASE_2, CASE_3, CASE_4, CASE_5, CASE_6, CASE_7, CASE_8, CASE_9, CASE_10, CASE_11]
 
 
-def extract_years_of_experience(description: str) -> list[dict[str, str]]:
+def extract_years_of_experience(description: str) -> tuple[dict[str, str], ...]:
     """Extract `years of experience` + `field` mentions from a cleaned job description.
 
     Runs all patterns in PATTERNS against `description`, collecting every
@@ -159,8 +176,8 @@ def extract_years_of_experience(description: str) -> list[dict[str, str]]:
             **Warning:** *Calling this on raw HTML will not raise an error but won't work as expected.*
 
     **Returns:**
-        - A list of dicts, each shaped like `{"years": "5+", "field": "Python"}`.
-        - Returns an empty list if no years-of-experience mention is found.
+        - A tuple of dicts, each dict shaped like `{"years": "5+", "field": "Python"}`.
+        - Returns an empty tuple if no years-of-experience mention is found.
         - A single description can produce multiple dicts if it mentions
         experience requirements for more than one thing. "years" is
         returned as str and is NOT converted to int.
@@ -177,7 +194,7 @@ def extract_years_of_experience(description: str) -> list[dict[str, str]]:
             captured_json.append(match.groupdict())
             remaining = remaining[:match.start()] + remaining[match.end():]
 
-    return captured_json
+    return tuple(captured_json)
 
 def extract_required_tools(description: str) -> list[str]:
     # working on this in my jupyter notebook
