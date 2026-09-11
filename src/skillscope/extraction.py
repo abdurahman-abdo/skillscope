@@ -46,7 +46,7 @@ def extract_required_edu_background(desc: str) -> tuple[str, ...]:
     return tuple(return_values)
 
 """The constants below build up a set of regex patterns(CASE_1 .. CASE_11) 
-that each target a variety of possible ways job postings phrasea 
+that each target a variety of possible ways job postings phrase a 
 "years of experience in X" requirement. 
 
 `extract_years_of_experience` runs them against a description and returns whatever it finds.
@@ -209,7 +209,7 @@ def extract_years_of_experience(description: str) -> tuple[dict[str, str], ...]:
 
     return tuple(captured_json)
 
-def extract_required_tools(description: str) -> list[str]:
+def extract_required_tools(description: str) -> None:
     # working on this in my jupyter notebook
     pass
 
