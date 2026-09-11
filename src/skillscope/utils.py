@@ -20,10 +20,10 @@ def save_file(file_path: str, data: list[dict], mode: str = 'w') -> None:
     with open(file_path, mode, encoding='utf-8') as file:
         json.dump(data, file, ensure_ascii=False, indent=4)
 
-def group_values_by_key(*datas: dict) -> dict:
+def group_values_by_key(*data_dicts: dict) -> dict:
     dict_keys: list = []
     return_dict: dict = {}
-    for data in datas:
+    for data in data_dicts:
         for key in data.keys():
             if key not in dict_keys:
                 dict_keys.append(key)
