@@ -1,3 +1,5 @@
+from pathlib import Path
+from typing import Hashable
 import json
 import re
 import html
@@ -10,7 +12,7 @@ def main() -> None:
     
     print(clean_html("Skills<ul>text with no li tags</ul>Next"))
 
-def load_file(file_path: str) -> list[dict]:
+def load_file(file_path: str | Path) -> list[dict]:
     with open(file_path, 'r', encoding='utf-8') as file:
         return json.load(file)
 
@@ -31,7 +33,7 @@ def group_values_by_key(*datas: dict) -> dict:
 
     return return_dict
 
-def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> tuple:
+def make_hashable(obj: bool | int | float | str | list | set | tuple | dict) -> Hashable:
     if isinstance(obj, dict):
         return tuple(sorted((k, make_hashable(v)) for k, v in obj.items()))
     if isinstance(obj, (list, set, tuple)):
