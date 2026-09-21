@@ -7,7 +7,7 @@ cleaned_muse_path = config.CLEANED_DATA_PATH / "muse.csv"
 def main() -> None:
     muse_data = utils.load_file(fetch_muse.raw_muse_path)
 
-    muse_cleaned_data = list()
+    muse_cleaned_data = []
 
     for job in muse_data:
         work_type, country, location = get_exact_location(job.get("locations", {}))

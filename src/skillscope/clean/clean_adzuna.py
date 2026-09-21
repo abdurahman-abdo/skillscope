@@ -8,7 +8,7 @@ cleaned_adzuna_path = config.CLEANED_DATA_PATH / "adzuna.csv"
 def main():
     adzuna_data = utils.load_file(fetch_adzuna.raw_adzuna_path)
 
-    adzuna_cleaned_data = list()
+    adzuna_cleaned_data = []
 
     for job in adzuna_data:
         desc_cleaned = utils.clean_html(job.get("description", "")).replace("\n", "[NEWLINE]")        
